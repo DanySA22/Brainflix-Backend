@@ -1,0 +1,19 @@
+{
+  "name": "brainflix-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanySA22/Brainflix-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanySA22/Brainflix-Backend/issues"
+  },
+  "homepage": "https://github.com/DanySA22/Brainflix-Backend#readme"
+}
