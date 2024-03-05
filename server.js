@@ -10,9 +10,7 @@ const fs = require('fs')
 // })
 
 app.use(express.json())
-const data = fs.readFileSync('./data/videos.json', 'utf8')
-const dataAsObject = Array.from(JSON.parse(data))
-console.log(dataAsObject[2].title)
+
 app.use('/videos', video)
 app.use(express.static('./public/images'))
 app.listen(PORT)
