@@ -36,6 +36,7 @@ router.get('/:id', (req, res) =>{
 })
 
 let imageFilename = ''
+let imagePath = ''
 //uploading images
 router.post('/upload', (req,res) =>{
     upload(req, res, () => {
@@ -44,11 +45,17 @@ router.post('/upload', (req,res) =>{
         } else {
             
             imageFilename = req.file.filename
-            res.json(console.log(req.body))
-            console.log(imageFilename)
+            imagePath = req.file.path
+            res.json(req.file.path)
+           
         }
     } 
 )})
+
+//retrieving the image being uploaded
+router.get('/retrieve-upload', (req, res) => {
+    res.json(imagePath)
+})
 
 //Route that post the upload video information
 router.post('/', (req, res) =>{
