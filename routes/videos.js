@@ -36,37 +36,46 @@ router.get('/:id', (req, res) =>{
 })
 
 let imageFilename = ''
-let imagePath = ''
+
 //uploading images
 router.post('/upload', (req,res) =>{
     upload(req, res, () => {
         if (req.file == undefined){
-            res.send(alert('Issues uploading the Image. Try again'))
+            console.log(5)
+            res.send('Issues uploading the Image. Try again')
         } else {
-            
-            imageFilename = req.file.filename
-            imagePath = req.file.path
-            res.json(req.file.path)
            
+            imageFilename = req.file.filename
+            res.json(req.file.filename)
+           
+                       
         }
     } 
 )})
 
-//retrieving the image being uploaded
-router.get('/retrieve-upload', (req, res) => {
-    res.json(imagePath)
-})
 
 //Route that post the upload video information
 router.post('/', (req, res) =>{
     //I need to check if the req.body has included the file name on the image property that
     //way it also takes the current upload image based on his name
-    req.body.image = `http://localhost:8080/${imageFilename}`
-    console.log(req.body.image)
+    const fileExtension = imageFilename.split('.').pop().toLowerCase()
+    console.log(fileExtension)
+    if (fileExtension == 'mp4') {
+        req.body.image = `http://localhost:8080/imageDefaultThumbnail.jpg`
+        req.body.video =  `http://localhost:8080/${imageFilename}`
+        dataAsObject.push(req.body)
+        const dataAsString = JSON.stringify(dataAsObject, null, 2)
+        fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
+        res.json(console.log(req.body))
+    } else {
+        req.body.image = `http://localhost:8080/${imageFilename}`
+        console.log(req.body.image)
     dataAsObject.push(req.body)
     const dataAsString = JSON.stringify(dataAsObject, null, 2)
     fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
     res.json(console.log(req.body))
+    }
+    
 })
 
 
