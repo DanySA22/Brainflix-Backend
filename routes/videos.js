@@ -4,7 +4,7 @@ const fs = require('fs')
 const multer = require('multer')
 const path = require('path')
 
-
+//Adding on the middleware multer a destination and a way to name the uploaded files
 const videoStorage = multer.diskStorage({
     destination: './public/images-video',
     filename: (req, file, cb) => {
@@ -13,16 +13,14 @@ const videoStorage = multer.diskStorage({
  
  const upload = multer({
      storage: videoStorage,
-     limits:{fileSize: 10000000},  //10mb the limit
+     limits:{fileSize: 30000000},  //30mb the max-size of upcoming file
  }).single('image')
 
 //Reading the data from the JSON file
 const data = fs.readFileSync('./data/videos.json', 'utf8')
 
 //Transforming the JSON data into an array of objects
-const dataAsObject = Array.from(JSON.parse(data))
-
-// console.log(dataAsObject.find((item) => item.id == "84e96018-4022-434e-80bf-000ce4cd12b8"))
+const dataAsObject = Array.from(JSON.parse(data))  
 
 //Route that gets all the videos of the list
 router.get('/', (req, res) =>{
@@ -35,45 +33,39 @@ router.get('/:id', (req, res) =>{
     res.json(oneVideo)
 })
 
-let imageFilename = ''
-
 //uploading images
+let imageFilename = ''
 router.post('/upload', (req,res) =>{
     upload(req, res, () => {
         if (req.file == undefined){
-            console.log(5)
             res.send('Issues uploading the Image. Try again')
         } else {
-           
             imageFilename = req.file.filename
             res.json(req.file.filename)
-           
-                       
+                              
         }
     } 
 )})
 
 
-//Route that post the upload video information
+//Route that post the upload video information and based in the file extension (if it is a video or image)
+//will change what is posted as image and as video.
 router.post('/', (req, res) =>{
-    //I need to check if the req.body has included the file name on the image property that
-    //way it also takes the current upload image based on his name
     const fileExtension = imageFilename.split('.').pop().toLowerCase()
-    console.log(fileExtension)
-    if (fileExtension == 'mp4') {
+    if (fileExtension == 'mp4' || fileExtension == 'avi') {
         req.body.image = `http://localhost:8080/imageDefaultThumbnail.jpg`
         req.body.video =  `http://localhost:8080/${imageFilename}`
         dataAsObject.push(req.body)
         const dataAsString = JSON.stringify(dataAsObject, null, 2)
         fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
-        res.json(console.log(req.body))
+        res.json(req.body)
     } else {
         req.body.image = `http://localhost:8080/${imageFilename}`
-        console.log(req.body.image)
+        
     dataAsObject.push(req.body)
     const dataAsString = JSON.stringify(dataAsObject, null, 2)
     fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
-    res.json(console.log(req.body))
+    res.json(req.body)
     }
     
 })
@@ -86,7 +78,7 @@ router.post('/:id/comments', (req, res) =>{
     oneVideo.comments.push(req.body)
     const dataAsString = JSON.stringify(dataAsObject, null, 2)
     fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
-    res.json(console.log('post comment'))
+    res.json('post comment')
 })
 
 // Route that delete a comment for one of the video of the list based on the id of the comment
@@ -96,7 +88,7 @@ router.delete('/:videoId/comments/:commentId', (req, res) =>{
     oneVideo.comments.splice(indexComment)
     const dataAsString = JSON.stringify(dataAsObject, null, 2)
     fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
-    res.json(console.log('delete comment'))
+    res.json('delete comment')
 })
 
 // Route that update like on comment for one of the video of the list based on the id of the comment
@@ -105,9 +97,7 @@ router.put('/:videoId/likes', (req, res) =>{
     oneVideo.likes = req.body.likes
     const dataAsString = JSON.stringify(dataAsObject, null, 2)
     fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
-    res.json(console.log('like video'))
+    res.json('like video')
 })
-// When someone submit the upload form it post all the object info (including the image source folder
-//on the express app and the name of the image). This also means that we should create a parallel process that when 
-//an image is uploaded get send to this folder on express.app
+
 module.exports = router;
