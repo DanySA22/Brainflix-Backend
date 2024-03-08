@@ -18,6 +18,8 @@ const {PORT, API_KEY} = process.env
 // }
 // app.use(checkAPIKey)
 
+
+
 app.use(express.json())
 app.use(cors())
 app.use('/videos', video)

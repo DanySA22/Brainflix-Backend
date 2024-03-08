@@ -1,13 +1,27 @@
 const express = require('express')
 const router = express.Router()
 const fs = require('fs')
+const multer = require('multer')
+const path = require('path')
+
+
+const videoStorage = multer.diskStorage({
+    destination: './public/images-video',
+    filename: (req, file, cb) => {
+     cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname))
+    }})
+ 
+ const upload = multer({
+     storage: videoStorage,
+     limits:{fileSize: 10000000},  //10mb the limit
+ }).single('image')
 
 //Reading the data from the JSON file
 const data = fs.readFileSync('./data/videos.json', 'utf8')
 
 //Transforming the JSON data into an array of objects
 const dataAsObject = Array.from(JSON.parse(data))
-console.log(dataAsObject[2].comments)
+
 // console.log(dataAsObject.find((item) => item.id == "84e96018-4022-434e-80bf-000ce4cd12b8"))
 
 //Route that gets all the videos of the list
@@ -21,13 +35,34 @@ router.get('/:id', (req, res) =>{
     res.json(oneVideo)
 })
 
+let imageFilename = ''
+//uploading images
+router.post('/upload', (req,res) =>{
+    upload(req, res, () => {
+        if (req.file == undefined){
+            res.send(alert('Issues uploading the Image. Try again'))
+        } else {
+            
+            imageFilename = req.file.filename
+            res.json(console.log(req.body))
+            console.log(imageFilename)
+        }
+    } 
+)})
+
 //Route that post the upload video information
 router.post('/', (req, res) =>{
+    //I need to check if the req.body has included the file name on the image property that
+    //way it also takes the current upload image based on his name
+    req.body.image = `http://localhost:8080/${imageFilename}`
+    console.log(req.body.image)
     dataAsObject.push(req.body)
     const dataAsString = JSON.stringify(dataAsObject, null, 2)
     fs.writeFileSync('./data/videos.json', dataAsString, 'utf8')
     res.json(console.log(req.body))
 })
+
+
 
 //Route that post a comment for one of the video of the list
 router.post('/:id/comments', (req, res) =>{
