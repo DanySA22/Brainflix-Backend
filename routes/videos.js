@@ -33,7 +33,8 @@ router.get('/:id', (req, res) =>{
     res.json(oneVideo)
 })
 
-//uploading images
+//uploading images. The response will contain the filename added on upload that way on client user can see if 
+//uploaded the right file -if it is an image.
 let imageFilename = ''
 router.post('/upload', (req,res) =>{
     upload(req, res, () => {
@@ -52,7 +53,7 @@ router.post('/upload', (req,res) =>{
 //will change what is posted as image and as video.
 router.post('/', (req, res) =>{
     const fileExtension = imageFilename.split('.').pop().toLowerCase()
-    if (fileExtension == 'mp4' || fileExtension == 'avi') {
+    if (fileExtension == 'mp4' || fileExtension == 'avi' || fileExtension == 'mov' || fileExtension == 'wmv' || fileExtension == 'mkv') {
         req.body.image = `http://localhost:8080/imageDefaultThumbnail.jpg`
         req.body.video =  `http://localhost:8080/${imageFilename}`
         dataAsObject.push(req.body)
