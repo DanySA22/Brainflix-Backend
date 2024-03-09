@@ -6,7 +6,7 @@
     "image": "http://localhost:8080/image0.jpg",
     "description": "Explore the cutting-edge developments and predictions for Artificial Intelligence in the coming years. From revolutionary breakthroughs in machine learning to the ethical considerations influencing AI advancements, this exploration transcends the boundaries of mere speculation. Join us on a journey that navigates the intricate interplay between innovation, ethics, and the ever-evolving tech frontier.",
     "views": "980,544",
-    "likes": "22487",
+    "likes": "22480",
     "duration": "4:01",
     "video": "http://localhost:8080/BrainStation%20Sample%20Video.mp4",
     "timestamp": 1691471862000,
@@ -170,13 +170,6 @@
         "comment": "Can't wait for more documentaries that celebrate the harmony of our natural world!",
         "likes": 2,
         "timestamp": 1680239862000
-      },
-      {
-        "id": "85e3621c-493a-41e0-b0f8-2734d102c7d9",
-        "name": "Hannah M. Laursen",
-        "comment": "The attention to detail and the storytelling make it an immersive experience. I'm curious about your favorite moments or encounters during the filming process. Share some behind-the-scenes stories if possible!",
-        "likes": 0,
-        "timestamp": 1680153462000
       }
     ]
   },
